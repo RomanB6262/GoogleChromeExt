@@ -1,0 +1,9 @@
+{
+  "manifest_version": 3,
+  "name": "PhishGuard",
+  "version": "1.0.0",
+  "description": "Simple anti-phishing scanner",
+  "action": {
+    "default_popup": "index.html"
+  }
+}
