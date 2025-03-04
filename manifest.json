@@ -1,9 +1,18 @@
 {
   "manifest_version": 3,
   "name": "PhishGuard",
-  "version": "1.0.1",
-  "description": "Simple anti-phishing scanner",
+  "version": "1.0.2",
+  "description": "Simple anti-phishing scanner.",
+  "permissions": [
+    "tabs", 
+    "activeTab", 
+    "storage", 
+    "notifications"  
+  ],
   "action": {
     "default_popup": "index.html"
+  },
+  "background": {
+    "service_worker": "background.js"
   }
 }

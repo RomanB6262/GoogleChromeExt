@@ -14,18 +14,25 @@
       <h1>PhishGuard</h1>
       <div class="header-buttons">
         <button class="icon-button" id="supportButton" title="Report Problem">
-		  <i class="fas fa-question-circle"></i>
-		</button>
+          <i class="fas fa-question-circle"></i>
+        </button>
         <button class="icon-button" id="settingsButton" title="Settings">
           <i class="fas fa-cog"></i> 
         </button>
-		<button class="icon-button" id="extrasButton" title="Extras">
-          <i class="fas fa-ellipsis-v"></i> 
-        </button>
+        <div class="dropdown">
+          <button class="icon-button" id="extrasButton" title="Extras">
+            <i class="fas fa-ellipsis-v"></i> 
+          </button>
+          <div class="dropdown-content">
+            <a href="aboutpage.html" id="aboutPage">About Page</a>            
+            <a href="donation.html" id="donationPage">Donation Page</a>
+			<a> Sync Settings(Coming Soon)</a>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Section with total anomalies on the page --!>
+    <!-- Section with total anomalies on the page -->
     <div class="section">
       <h2>Phishing Attempts</h2>
       <div class="content">

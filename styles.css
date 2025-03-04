@@ -65,3 +65,50 @@ label {
 input[type="checkbox"] {
   margin: 0;
 }
+
+/* Dropdown Container */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Button */
+.dropdown button {
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Dropdown Content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #fff;
+  min-width: 160px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  padding: 10px 0;
+}
+
+/* Dropdown Links */
+.dropdown-content a {
+  color: #333;
+  padding: 8px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Hover effect for links */
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+/* Show the dropdown when hovering over the button */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
