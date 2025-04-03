@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "PhishGuard",
+  "version": "1.0.4",
+  "description": "Simple anti-phishing scanner.",
+  "icons": {
+    "128": "Icons/icon128.png",
+    "48": "Icons/icon48.png",
+    "16": "Icons/icon16.png"
+  },
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "index.html"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["content.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
