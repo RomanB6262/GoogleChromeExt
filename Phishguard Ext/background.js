@@ -122,3 +122,6 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     checkPhishingSite(tab.url, tabId);
   }
 });
+
+
+chrome.runtime.setUninstallURL("https://github.com/RomanB6262/GoogleChromeExt/blob/main/Phishguard%20Ext/uninstall.html");

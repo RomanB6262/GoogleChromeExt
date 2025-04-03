@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Uninstall Feedback - PhishGuard</title>
+  <link rel="stylesheet" href="support.css" />
+</head>
+<body class="light-theme">
+  <div class="container section">
+    <div style="background: #fdecea; color: #b71c1c; padding: 12px 16px; border-radius: 6px; font-weight: bold; border: 1px solid #f5c6cb;">
+      ⚠️ Uninstalling PhishGuard leaves you vulnerable to phishing, scams, and other online threats.
+    </div>
+
+    <h2>We're Sorry to See You Go!</h2>
+    <p style="font-size: 13px;">What’s the main reason for uninstalling PhishGuard? Choose the option that best describes your reason and help us improve.</p>
+
+    <form id="feedbackForm">
+      <label><input type="radio" name="reason" value="not_needed" required> I don't need it anymore</label>
+      <label><input type="radio" name="reason" value="issues"> I had technical issues</label>
+      <label><input type="radio" name="reason" value="price"> It's not free</label>
+      <label><input type="radio" name="reason" value="better_alt"> I found a better alternative</label>
+      <label><input type="radio" name="reason" value="other"> Other</label>
+
+      <textarea name="details" rows="3" placeholder="Tell us more (optional)"></textarea>
+
+      <button type="submit">Submit Feedback</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("feedbackForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      alert("✅ Feedback submitted! Thanks for helping us improve PhishGuard.");
+      // Optional: send feedback to a server endpoint here
+    });
+  </script>
+</body>
+</html>
