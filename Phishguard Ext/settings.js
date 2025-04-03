@@ -3,28 +3,41 @@ document.addEventListener("DOMContentLoaded", function () {
   const confirmButton = document.getElementById("confirmButton");
   const body = document.body;
 
+  const blacklistTextarea = document.getElementById("blacklist");
+  const saveListsButton = document.getElementById("saveLists");
+
   // Load saved theme from localStorage
   const savedTheme = localStorage.getItem("theme") || "light";
   body.classList.add(`${savedTheme}-theme`);
   themeSelect.value = savedTheme;
 
-  // Handle Confirm Changes button click
+  // Handle Confirm Changes button click (Theme)
   confirmButton.addEventListener("click", function () {
     const selectedTheme = themeSelect.value;
 
-    // Show confirmation dialog
     const isConfirmed = confirm("Are you sure you want to change the theme?");
     if (isConfirmed) {
-      // Remove existing theme class
       body.classList.remove("light-theme", "dark-theme");
-
-      // Add new theme class
       body.classList.add(`${selectedTheme}-theme`);
-
-      // Save theme preference to localStorage
       localStorage.setItem("theme", selectedTheme);
-
       alert("Theme changed successfully!");
     }
+  });
+
+  // Load saved blacklist from chrome.storage
+  chrome.storage.local.get(["blacklist"], (data) => {
+    if (data.blacklist) blacklistTextarea.value = data.blacklist.join("\n");
+  });
+
+  // Handle Save List button click
+  saveListsButton.addEventListener("click", () => {
+    const blacklist = blacklistTextarea.value
+      .split("\n")
+      .map(url => url.trim())
+      .filter(url => url);
+
+    chrome.storage.local.set({ blacklist }, () => {
+      alert("Blacklist saved successfully.");
+    });
   });
 });

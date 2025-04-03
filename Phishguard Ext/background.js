@@ -3,7 +3,7 @@ const OPENPHISH_URL = "https://openphish.com/feed.txt";
 
 let phishingList = new Set();
 
-// Always load local list first (Loads the person blacklist)
+// Always load local list first (Loads the personal blacklist)
 loadLocalPhishingList();
 
 // Normalize URLs to avoid trailing slash mismatches
@@ -50,7 +50,7 @@ function loadLocalPhishingList() {
     .catch(err => console.error("❌ Error loading local phishing list:", err));
 }
 
-//Updates phishing list from OpenPhish
+// Updates phishing list from OpenPhish
 function updatePhishingList() {
   fetch(OPENPHISH_URL)
     .then(response => response.text())
@@ -66,44 +66,50 @@ function updatePhishingList() {
     .catch(error => console.error("❌ Failed to fetch OpenPhish data:", error));
 }
 
-// Check tab URL against phishing list
+// Check tab URL against phishing list and user-defined blacklist
 function checkPhishingSite(url, tabId) {
   try {
     const currentUrl = normalizeUrl(url);
     const currentHost = new URL(currentUrl).hostname.toLowerCase();
     console.log("🔍 Checking tab URL:", currentUrl);
 
-    for (const entry of phishingList) {
-      try {
-        const phishUrl = normalizeUrl(entry);
-        const phishHost = new URL(phishUrl).hostname.toLowerCase();
+    chrome.storage.local.get(["blacklist"], (storageData) => {
+      const dynamicBlacklist = new Set([
+        ...phishingList,
+        ...(storageData.blacklist || [])
+      ]);
 
-        console.log("👀 Comparing to phishing entry:", phishUrl);
+      for (const entry of dynamicBlacklist) {
+        try {
+          const phishUrl = normalizeUrl(entry);
+          const phishHost = new URL(phishUrl).hostname.toLowerCase();
 
-        if (
-          currentUrl === phishUrl ||
-          currentUrl.startsWith(phishUrl) ||
-          currentHost === phishHost ||
-          currentHost.endsWith(`.${phishHost}`)
-        ) {
-          console.log("🚨 MATCH FOUND:", currentUrl, "matches", phishUrl);
+          console.log("👀 Comparing to phishing entry:", phishUrl);
 
-          // Inject modal into the detected phishing tab
-          chrome.scripting.executeScript({
-            target: { tabId: tabId },
-            files: ["content.js"]
-          }, () => {
-            console.log("⚠️ Injected phishing modal into tab:", tabId);
-          });
+          if (
+            currentUrl === phishUrl ||
+            currentUrl.startsWith(phishUrl) ||
+            currentHost === phishHost ||
+            currentHost.endsWith(`.${phishHost}`)
+          ) {
+            console.log("🚨 MATCH FOUND:", currentUrl, "matches", phishUrl);
 
-          return;
+            chrome.scripting.executeScript({
+              target: { tabId: tabId },
+              files: ["content.js"]
+            }, () => {
+              console.log("⚠️ Injected phishing modal into tab:", tabId);
+            });
+
+            return;
+          }
+        } catch (err) {
+          console.warn("⚠️ Skipping invalid phishing entry:", entry, err.message);
         }
-      } catch (err) {
-        console.warn("⚠️ Skipping invalid phishing entry:", entry, err.message);
       }
-    }
 
-    console.log("✅ No phishing match found for:", currentUrl);
+      console.log("✅ No phishing match found for:", currentUrl);
+    });
 
   } catch (error) {
     console.error("❌ Error in checkPhishingSite:", error);
