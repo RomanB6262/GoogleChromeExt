@@ -4,16 +4,101 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Uninstall Feedback - PhishGuard</title>
-  <link rel="stylesheet" href="support.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 12px;
+      padding: 30px 40px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .warning {
+      background: #fdecea;
+      color: #b71c1c;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      border: 1px solid #f5c6cb;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    h2 {
+      margin-top: 10px;
+    }
+
+    form {
+      text-align: left;
+    }
+
+    form label {
+      display: block;
+      margin: 8px 0;
+      font-size: 14px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      resize: vertical;
+    }
+
+    button {
+      width: 100%;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    img {
+      max-width: 64px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    p {
+      font-size: 14px;
+      margin-top: 10px;
+    }
+  </style>
 </head>
-<body class="light-theme">
-  <div class="container section">
-    <div style="background: #fdecea; color: #b71c1c; padding: 12px 16px; border-radius: 6px; font-weight: bold; border: 1px solid #f5c6cb;">
+<body>
+  <div class="container">
+    <img src="Icons/icon128.png" alt="PhishGuard Logo" />
+    <h2>We're Sorry to See You Go!</h2>
+
+    <div class="warning">
       ⚠️ Uninstalling PhishGuard leaves you vulnerable to phishing, scams, and other online threats.
     </div>
 
-    <h2>We're Sorry to See You Go!</h2>
-    <p style="font-size: 13px;">What’s the main reason for uninstalling PhishGuard? Choose the option that best describes your reason and help us improve.</p>
+    <p>What’s the main reason for uninstalling PhishGuard? Choose the option that best describes your reason and help us improve.</p>
 
     <form id="feedbackForm">
       <label><input type="radio" name="reason" value="not_needed" required> I don't need it anymore</label>
@@ -22,8 +107,9 @@
       <label><input type="radio" name="reason" value="better_alt"> I found a better alternative</label>
       <label><input type="radio" name="reason" value="other"> Other</label>
 
+      <br>
       <textarea name="details" rows="3" placeholder="Tell us more (optional)"></textarea>
-
+      <br>
       <button type="submit">Submit Feedback</button>
     </form>
   </div>
@@ -32,7 +118,6 @@
     document.getElementById("feedbackForm").addEventListener("submit", function (e) {
       e.preventDefault();
       alert("✅ Feedback submitted! Thanks for helping us improve PhishGuard.");
-      // Optional: send feedback to a server endpoint here
     });
   </script>
 </body>
