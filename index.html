@@ -26,7 +26,7 @@
           <div class="dropdown-content">
             <a href="aboutpage.html" id="aboutPage">About Page</a>            
             <a href="donation.html" id="donationPage">Donation Page</a>
-			<a> Sync Settings(Coming Soon)</a>
+            <a> Sync Settings (Coming Soon)</a>
           </div>
         </div>
       </div>
@@ -43,13 +43,48 @@
       </div>
     </div>
 
-    <!-- This Section I Need to Fill -->
+    <!-- Filled Section with Scan Button -->
     <div class="section">
-      <h2>This Section I Need to Fill</h2>
+      <h2>Page Scanner</h2>
       <div class="content">
-        <p>Don't know yet</p>
+        <button id="scanPageBtn" class="scan-button">🔍 Scan This Page</button>
+        <p id="scanResult">Result: Not scanned yet.</p>
+
+        <!-- Trust Meter Circle -->
+        <div class="trust-meter">
+          <svg viewBox="0 0 36 36" class="circular-chart" id="trustChart">
+            <path class="circle-bg"
+                  d="M18 2.0845
+                     a 15.9155 15.9155 0 0 1 0 31.831
+                     a 15.9155 15.9155 0 0 1 0 -31.831"/>
+            <path class="circle"
+                  stroke-dasharray="0, 100"
+                  d="M18 2.0845
+                     a 15.9155 15.9155 0 0 1 0 31.831
+                     a 15.9155 15.9155 0 0 1 0 -31.831"/>
+            <text x="18" y="20.35" class="percentage" id="trustLabel">0%</text>
+          </svg>
+        </div>
       </div>
     </div>
+	
+		<!-- URL Checker Section -->
+	<div class="section">
+	  <h2>URL Checker</h2>
+	  <div class="content">
+		<input type="text" id="urlInput"
+       placeholder="Enter a website URL..."
+       style="width: 100%; padding: 8px; box-sizing: border-box; margin-bottom: 10px;" />
+		<button id="checkUrlBtn" class="scan-button">🔗 Check This URL</button>
+		<p id="urlCheckResult">Result: Not checked yet.</p>
+
+		<!-- Trust Bar -->
+		<div id="urlTrustBarContainer" style="width: 100%; background: #eee; height: 12px; border-radius: 6px; overflow: hidden;">
+		  <div id="urlTrustBar" style="width: 0%; height: 100%; background: green; transition: width 0.4s;"></div>
+		</div>
+	  </div>
+	</div>
+
 
     <!-- Allow This Website by Default -->
     <div class="section">
@@ -67,7 +102,6 @@
     <p>&copy; 2025 PhishGuard. All rights reserved.</p>
   </footer>
 
-  <script src="popup.js"></script>
-  
+  <script src="popup.js" type="module"></script>
 </body>
 </html>

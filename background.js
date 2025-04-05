@@ -116,12 +116,23 @@ function checkPhishingSite(url, tabId) {
   }
 }
 
-// Watch for tab updates
+// Listen for tab loads to scan them
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === "complete" && tab.url) {
     checkPhishingSite(tab.url, tabId);
   }
 });
 
+// Handle uninstall tracking
+chrome.runtime.setUninstallURL("https://RomanB6262.github.io/GoogleChromeExt/uninstall.html");
 
-chrome.runtime.setUninstallURL("https://RomanB6262.github.io/GoogleChromeExt/Phishguard%20Ext/uninstall.html");
+// ✅ NEW: Listener for trust meter blacklist checks
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.checkBlacklist) {
+    const url = message.checkBlacklist.trim();
+    const normalized = normalizeUrl(url);
+    const isBlacklisted = phishingList.has(normalized);
+    sendResponse({ blacklisted: isBlacklisted });
+    return true;
+  }
+});

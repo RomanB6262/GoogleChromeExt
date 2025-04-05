@@ -112,3 +112,36 @@ input[type="checkbox"] {
   display: block;
 }
 
+.trust-meter {
+  width: 100px;
+  margin: 15px auto;
+}
+
+.circular-chart {
+  display: block;
+  margin: 10px auto;
+  max-width: 100%;
+  max-height: 120px;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: #eee;
+  stroke-width: 3.8;
+}
+
+.circle {
+  fill: none;
+  stroke-width: 3.8;
+  stroke-linecap: round;
+  stroke: green; /* default */
+  transition: stroke-dasharray 0.6s ease, stroke 0.6s ease;
+}
+
+.percentage {
+  fill: #333;
+  font-family: 'Arial', sans-serif;
+  font-size: 0.5em;
+  text-anchor: middle;
+}
+
