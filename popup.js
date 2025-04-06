@@ -19,8 +19,8 @@ document.getElementById("scanPageBtn").addEventListener("click", async () => {
         const domain = location.hostname;
 
         async function getDomainAge(domain) {
-          const apiKey = 'YOUR_API_KEY_HERE';
-          const apiUrl = `https://endpoint.apivoid.com/domainage/v1/pay-as-you-go/?key=${apiKey}&host=${domain}`;
+          const apiKey = 'jFIiv513heHILP8OLlAXxtqwJ-Ei8gw7dRY3tpWS.1SGtjdQXa7fwEN6w-NlLClV';
+          const apiUrl = `https://endpoint.apivoid.com/domainage/v1/?key=${apiKey}&host=${domain}`;
           try {
             const response = await fetch(apiUrl);
             const data = await response.json();
@@ -141,14 +141,13 @@ document.getElementById("checkUrlBtn").addEventListener("click", async () => {
 
     let score = 0;
 
-    // Same heuristics as page scanner
     if (domain.match(/\b\d{1,3}(\.\d{1,3}){3}\b/)) score += 3;
     if ((domain.match(/-/g) || []).length >= 3) score += 2;
     if (!url.protocol.includes("https")) score += 4;
 
     try {
       const apiKey = 'jFIiv513heHILP8OLlAXxtqwJ-Ei8gw7dRY3tpWS.1SGtjdQXa7fwEN6w-NlLClV';
-      const apiUrl = `https://endpoint.apivoid.com/domainage/v1/pay-as-you-go/?key=${apiKey}&host=${domain}`;
+      const apiUrl = `https://endpoint.apivoid.com/domainage/v1/?key=${apiKey}&host=${domain}`;
       const response = await fetch(apiUrl);
       const data = await response.json();
       if (response.ok && !data.error) {
