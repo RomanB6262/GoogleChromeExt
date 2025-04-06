@@ -88,4 +88,11 @@ function showPhishingModal(domain) {
   };
 }
 
-showPhishingModal(location.hostname);
+// === CHECK ALLOWLIST BEFORE WARNING ===
+const domain = location.hostname.replace(/^www\\./, "").toLowerCase();
+
+chrome.storage.local.get({ allowedSites: [] }, ({ allowedSites }) => {
+  if (!allowedSites.includes(domain)) {
+    showPhishingModal(domain);
+  }
+});

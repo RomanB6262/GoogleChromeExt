@@ -172,3 +172,34 @@ document.getElementById("checkUrlBtn").addEventListener("click", async () => {
     bar.style.backgroundColor = color;
   });
 });
+
+// === ALLOW THIS WEBSITE BY DEFAULT ===
+document.addEventListener("DOMContentLoaded", () => {
+  const checkbox = document.getElementById("allowWebsite");
+  if (!checkbox) return;
+
+  chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
+    const url = new URL(tab.url);
+    const domain = url.hostname.replace(/^www\\./, "").toLowerCase();
+
+    chrome.storage.local.get({ allowedSites: [] }, ({ allowedSites }) => {
+      if (allowedSites.includes(domain)) {
+        checkbox.checked = true;
+      }
+    });
+
+    checkbox.addEventListener("change", () => {
+      chrome.storage.local.get({ allowedSites: [] }, ({ allowedSites }) => {
+        if (checkbox.checked) {
+          if (!allowedSites.includes(domain)) {
+            allowedSites.push(domain);
+            chrome.storage.local.set({ allowedSites });
+          }
+        } else {
+          const updated = allowedSites.filter(site => site !== domain);
+          chrome.storage.local.set({ allowedSites: updated });
+        }
+      });
+    });
+  });
+});
