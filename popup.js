@@ -40,21 +40,16 @@ document.getElementById("scanPageBtn").addEventListener("click", async () => {
               score: 60,
               trustRating: 0,
               color: "black",
-              message: "🚫 This is a phishing website"
+              message: "🚫 This is a phishing website",
+              flags: 5
             };
           }
 
           let score = 0;
           let flags = 0;
-          let httpDetected = false;
           const maxScore = 60;
 
-          if (location.protocol !== "https:") {
-            score += 20;
-            flags++;
-            httpDetected = true;
-          }
-
+          if (location.protocol !== "https:") { score += 20; flags++; }
           if (domain.match(/\b\d{1,3}(\.\d{1,3}){3}\b/)) { score += 3; flags++; }
           if ((domain.match(/-/g) || []).length >= 3) { score += 2; flags++; }
           if (domain.length > 30) { score += 2; flags++; }
@@ -87,12 +82,12 @@ document.getElementById("scanPageBtn").addEventListener("click", async () => {
           if (flags >= 4) {
             color = "red";
             message = "❌ Don’t Trust This Website";
-          } else if (flags >= 2 || httpDetected) {
+          } else if (flags >= 2) {
             color = "orange";
             message = "⚠️ Be Cautious";
           }
 
-          return { trustRating, score, color, message };
+          return { trustRating, score, color, message, flags };
         }
 
         const result = await runHeuristicDetection();
@@ -107,7 +102,7 @@ document.getElementById("scanPageBtn").addEventListener("click", async () => {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.scanResult) {
-    const { trustRating, color, message: msg } = message.scanResult;
+    const { trustRating, color, message: msg, flags } = message.scanResult;
     const resultElement = document.getElementById("scanResult");
     const ring = document.querySelector('.circle');
     const label = document.getElementById('trustLabel');
@@ -121,6 +116,28 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       ring.setAttribute('stroke', color);
       label.textContent = `${trustRating}%`;
     }
+
+    // Update phishing attempts count
+    chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
+      const domain = new URL(tab.url).hostname.replace(/^www\./, "");
+      const domainKey = `flags_${domain}`;
+
+      chrome.storage.local.get(["phishingTotal", domainKey], (data) => {
+        const currentPageFlags = flags;
+        const totalSoFar = typeof data.phishingTotal === "number" ? data.phishingTotal : 0;
+        const updatedTotal = totalSoFar + currentPageFlags;
+
+        chrome.storage.local.set({
+          phishingTotal: updatedTotal,
+          [domainKey]: currentPageFlags
+        }, () => {
+          const pageSpan = document.getElementById("onThisPage");
+          const totalSpan = document.getElementById("inTotal");
+          if (pageSpan) pageSpan.textContent = currentPageFlags;
+          if (totalSpan) totalSpan.textContent = updatedTotal;
+        });
+      });
+    });
   }
 });
 
@@ -146,7 +163,6 @@ document.getElementById("checkUrlBtn").addEventListener("click", async () => {
   const domain = url.hostname;
   let score = 0;
   let flags = 0;
-  let httpDetected = false;
   const maxScore = 60;
 
   chrome.runtime.sendMessage({ checkBlacklist: domain }, async (response) => {
@@ -160,7 +176,7 @@ document.getElementById("checkUrlBtn").addEventListener("click", async () => {
       return;
     }
 
-    if (url.protocol === "http:") { score += 20; flags++; httpDetected = true; }
+    if (url.protocol === "http:") { score += 20; flags++; }
     if (domain.match(/\b\d{1,3}(\.\d{1,3}){3}\b/)) { score += 3; flags++; }
     if ((domain.match(/-/g) || []).length >= 3) { score += 2; flags++; }
     if (domain.length > 30) { score += 2; flags++; }
@@ -193,7 +209,7 @@ document.getElementById("checkUrlBtn").addEventListener("click", async () => {
     if (flags >= 4) {
       color = "red";
       message = "❌ Don’t Trust This Website";
-    } else if (flags >= 2 || httpDetected) {
+    } else if (flags >= 2) {
       color = "orange";
       message = "⚠️ Be Cautious";
     }
