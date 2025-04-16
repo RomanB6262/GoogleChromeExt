@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="support.css" /> 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 </head>
 <body>
   <div class="container">
     <!-- Logo Section -->
-    <div class="logo">
+    <div class="logo" id="logoSection">
       <img src="logo.png" alt="Logo" />
       <h1>PhishGuard</h1>
-      <div class="header-buttons">
+      <div class="header-buttons" id="headerButtons">
         <button class="icon-button" id="supportButton" title="Report Problem">
           <i class="fas fa-question-circle"></i>
         </button>
         <button class="icon-button" id="settingsButton" title="Settings">
           <i class="fas fa-cog"></i>
         </button>
-        <div class="dropdown">
+        <div class="dropdown" id="dropdownMenu">
           <button class="icon-button" id="extrasButton" title="Extras">
             <i class="fas fa-ellipsis-v"></i>
           </button>
@@ -32,8 +32,8 @@
       </div>
     </div>
 
-    <!-- Section with total anomalies on the page -->
-    <div class="section">
+    <!-- Phishing Attempts Section -->
+    <div class="section" id="phishingAttemptsSection">
       <h2>Phishing Attempts</h2>
       <div class="content">
         <ul>
@@ -43,25 +43,18 @@
       </div>
     </div>
 
-    <!-- Filled Section with Scan Button -->
-    <div class="section">
+    <!-- Page Scanner Section -->
+    <div class="section" id="scannerSection">
       <h2>Page Scanner</h2>
       <div class="content">
         <button id="scanPageBtn" class="scan-button">🔍 Scan This Page</button>
         <p id="scanResult">Result: Not scanned yet.</p>
-
-        <!-- Trust Meter Circle -->
         <div class="trust-meter">
           <svg viewBox="0 0 36 36" class="circular-chart" id="trustChart">
             <path class="circle-bg"
-                  d="M18 2.0845
-                     a 15.9155 15.9155 0 0 1 0 31.831
-                     a 15.9155 15.9155 0 0 1 0 -31.831"/>
-            <path class="circle"
-                  stroke-dasharray="0, 100"
-                  d="M18 2.0845
-                     a 15.9155 15.9155 0 0 1 0 31.831
-                     a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+            <path class="circle" stroke-dasharray="0, 100"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
             <text x="18" y="20.35" class="percentage" id="trustLabel">0%</text>
           </svg>
         </div>
@@ -69,29 +62,23 @@
     </div>
 
     <!-- URL Checker Section -->
-	<div class="section">
-	  <h2>URL Checker</h2>
-	  <div class="content">
-		<input type="text" id="urlInput"
-			   placeholder="Enter a website URL..."
-			   style="width: 100%; padding: 8px; box-sizing: border-box; margin-bottom: 10px;" />
-		<button id="checkUrlBtn" class="scan-button">🔗 Check This URL</button>
-		<p id="urlCheckResult">Result: Not checked yet.</p>
+    <div class="section" id="urlCheckerSection">
+      <h2>URL Checker</h2>
+      <div class="content">
+        <input type="text" id="urlInput" placeholder="Enter a website URL..."
+               style="width: 100%; padding: 8px; box-sizing: border-box; margin-bottom: 10px;" />
+        <button id="checkUrlBtn" class="scan-button">🔗 Check This URL</button>
+        <p id="urlCheckResult">Result: Not checked yet.</p>
+        <div id="urlTrustBarContainer" style="width: 100%; background: #eee; height: 12px; border-radius: 6px; overflow: hidden;">
+          <div id="urlTrustBar" style="width: 0%; height: 100%; background: green; transition: width 0.4s;"></div>
+        </div>
+        <p><b>Note:</b> This scan analyses the URL structure only and can't inspect the content of the webpage.
+        👉 For deeper analysis, please visit the site and click “Scan This Page” to check on-page elements.</p>
+      </div>
+    </div>
 
-		<!-- Trust Bar -->
-		<div id="urlTrustBarContainer" style="width: 100%; background: #eee; height: 12px; border-radius: 6px; overflow: hidden;">
-		  <div id="urlTrustBar" style="width: 0%; height: 100%; background: green; transition: width 0.4s;"></div>
-		</div>
-
-		<p style="margin-top: 8px;">
-		  <b>Note:</b> This scan analyses the URL structure only and can't inspect the content of the webpage. 
-		  <br>👉 For deeper analysis, please visit the site and click “Scan This Page” to check on-page elements.
-		</p>
-	  </div>
-	</div>
-
-    <!-- Allow This Website by Default -->
-    <div class="section">
+    <!-- Allow Site Section -->
+    <div class="section" id="allowSection">
       <h2>Allow This Website by Default</h2>
       <div class="content">
         <label for="allowWebsite">
@@ -106,23 +93,8 @@
     <p>&copy; 2025 PhishGuard. All rights reserved.</p>
   </footer>
 
-  
-  <script> //For total anomalies
-    document.addEventListener("DOMContentLoaded", () => {
-      chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
-        const domain = new URL(tab.url).hostname.replace(/^www\./, "");
-        const domainKey = `flags_${domain}`;
-        chrome.storage.local.get(["phishingTotal", domainKey], (data) => {
-          const onThisPage = data[domainKey] || 0;
-          const inTotal = Number.isInteger(data.phishingTotal) ? data.phishingTotal : 0;
-          document.getElementById("onThisPage").textContent = onThisPage;
-          document.getElementById("inTotal").textContent = inTotal;
-        });
-      });
-    });
-  </script>
-
-  <!-- Main Popup Logic -->
+  <!-- JS -->
+  <script src="settings.js"></script>
   <script src="popup.js" type="module"></script>
 </body>
 </html>
