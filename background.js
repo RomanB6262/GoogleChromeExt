@@ -3,10 +3,10 @@ const OPENPHISH_URL = "https://openphish.com/feed.txt";
 
 let phishingList = new Set();
 
-// Always load local list first (Loads the personal blacklist)
 loadLocalPhishingList();
+updatePhishingList();
 
-// Normalize URLs to avoid trailing slash mismatches
+// Normalise URLs to avoid trailing slash mismatches
 function normalizeUrl(url) {
   try {
     const parsed = new URL(url.trim());
@@ -42,25 +42,27 @@ function loadLocalPhishingList() {
         chrome.storage.local.getBytesInUse(null, (bytes) => {
           console.log("🧠 Storage usage:", bytes, "bytes");
         });
-
-        const codepenMatches = [...phishingList].filter(url => url.includes("codepen"));
-        console.log("🔎 CodePen entries in phishing list:", codepenMatches);
       });
     })
     .catch(err => console.error("❌ Error loading local phishing list:", err));
 }
 
-// Updates phishing list from OpenPhish
+// ✅ Updates phishing list from OpenPhish and merges with local list
 function updatePhishingList() {
   fetch(OPENPHISH_URL)
     .then(response => response.text())
     .then(data => {
-      phishingList = new Set(
-        data.split("\n").map(url => normalizeUrl(url)).filter(url => url)
-      );
+      const openphishUrls = data.split("\n")
+        .map(url => normalizeUrl(url))
+        .filter(url => !!url);
 
-      chrome.storage.local.set({ phishingList: Array.from(phishingList) }, () => {
-        console.log("🔄 Phishing list updated from OpenPhish:", phishingList.size, "entries");
+      chrome.storage.local.get({ phishingList: [] }, (existing) => {
+        const merged = new Set([...existing.phishingList, ...openphishUrls]);
+        phishingList = merged;
+
+        chrome.storage.local.set({ phishingList: Array.from(merged) }, () => {
+          console.log("🔄 Phishing list updated from OpenPhish:", merged.size, "entries");
+        });
       });
     })
     .catch(error => console.error("❌ Failed to fetch OpenPhish data:", error));
@@ -126,13 +128,29 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 // Handle uninstall tracking
 chrome.runtime.setUninstallURL("https://RomanB6262.github.io/GoogleChromeExt/uninstall.html");
 
-// ✅ NEW: Listener for trust meter blacklist checks
+// ✅ Listener for trust meter blacklist checks from popup.js
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.checkBlacklist) {
     const url = message.checkBlacklist.trim();
     const normalized = normalizeUrl(url);
-    const isBlacklisted = phishingList.has(normalized);
-    sendResponse({ blacklisted: isBlacklisted });
-    return true;
+
+    chrome.storage.local.get(["phishingList", "blacklist"], (data) => {
+      const localList = new Set(data.phishingList || []);
+      const userList = new Set(data.blacklist || []);
+      const fullList = new Set([...localList, ...userList]);
+
+      const isBlacklisted = [...fullList].some(phishUrl => {
+        try {
+          const normalizedPhish = normalizeUrl(phishUrl);
+          return normalized.includes(normalizedPhish) || normalized.includes(new URL(normalizedPhish).hostname);
+        } catch {
+          return false;
+        }
+      });
+
+      sendResponse({ blacklisted: isBlacklisted });
+    });
+
+    return true; // Required for async response
   }
 });

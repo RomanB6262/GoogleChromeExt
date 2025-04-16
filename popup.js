@@ -38,7 +38,7 @@ document.getElementById("scanPageBtn").addEventListener("click", async () => {
               status: "blacklisted",
               score: 16,
               trustRating: 0,
-              color: "red"
+              color: "black"
             };
           }
 
@@ -87,12 +87,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     if (status === "blacklisted") {
       resultElement.innerHTML = `
-        <strong>Result:</strong> 🚫 This site is on the blacklist.<br>
-        <strong>Trust Rating:</strong> <span style="color:red; font-weight: bold;">0 / 100</span>
+        <strong style="color:black;">🚫 This is a phishing website</strong><br>
+        <strong>Trust Rating:</strong> <span style="color:black; font-weight: bold;">0 / 100</span>
       `;
       if (ring && label) {
-        ring.setAttribute('stroke-dasharray', "0, 100");
-        ring.setAttribute('stroke', "red");
+        ring.setAttribute('stroke-dasharray', "100, 100");
+        ring.setAttribute('stroke', "black");
         label.textContent = "0%";
       }
       return;
@@ -133,9 +133,12 @@ document.getElementById("checkUrlBtn").addEventListener("click", async () => {
 
   chrome.runtime.sendMessage({ checkBlacklist: domain }, async (response) => {
     if (response && response.blacklisted) {
-      resultText.innerHTML = `🚫 This site is on the blacklist.<br><strong>Trust Rating:</strong> <span style="color:red;">0 / 100</span>`;
-      bar.style.width = "0%";
-      bar.style.backgroundColor = "red";
+      resultText.innerHTML = `
+        <strong style="color:black;">🚫 This is a phishing website</strong><br>
+        <strong>Trust Rating:</strong> <span style="color:black; font-weight: bold;">0 / 100</span>
+      `;
+      bar.style.width = "100%";
+      bar.style.backgroundColor = "black";
       return;
     }
 
@@ -180,7 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
     const url = new URL(tab.url);
-    const domain = url.hostname.replace(/^www\\./, "").toLowerCase();
+    const domain = url.hostname.replace(/^www\./, "").toLowerCase();
 
     chrome.storage.local.get({ allowedSites: [] }, ({ allowedSites }) => {
       if (allowedSites.includes(domain)) {

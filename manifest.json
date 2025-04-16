@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "PhishGuard",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Simple anti-phishing scanner.",
   "icons": {
     "128": "Icons/icon128.png",
@@ -25,7 +25,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["content.js", "heuristic.js"],
+      "resources": ["content.js", "heuristic.js", "Assets/phishingList.txt"],
       "matches": ["<all_urls>"]
     }
   ],
