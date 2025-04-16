@@ -47,7 +47,7 @@ function loadLocalPhishingList() {
     .catch(err => console.error("❌ Error loading local phishing list:", err));
 }
 
-// ✅ Updates phishing list from OpenPhish and merges with local list
+// Updates phishing list from OpenPhish and merges with local list
 function updatePhishingList() {
   fetch(OPENPHISH_URL)
     .then(response => response.text())
@@ -128,7 +128,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 // Handle uninstall tracking
 chrome.runtime.setUninstallURL("https://RomanB6262.github.io/GoogleChromeExt/uninstall.html");
 
-// ✅ Listener for trust meter blacklist checks from popup.js
+// Listener for trust meter blacklist checks from popup.js
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.checkBlacklist) {
     const url = message.checkBlacklist.trim();
