@@ -263,3 +263,30 @@ body.dark-theme {
 body.dark-theme .percentage {
   fill: #fff;
 }
+
+/* Light Theme Button */
+body.light-theme .scan-button,
+body.light-theme .check-button {
+  background-color: #f0f0f0;
+  color: #000;
+  border: 1px solid #ccc;
+}
+
+body.light-theme .scan-button:hover,
+body.light-theme .check-button:hover {
+  background-color: #ccc;
+}
+
+/* Dark Theme Button */
+body.dark-theme .scan-button,
+body.dark-theme .check-button {
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+body.dark-theme .scan-button:hover,
+body.dark-theme .check-button:hover {
+  background-color: #111;
+}
+
