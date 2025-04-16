@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="support.css" /> 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <title id="pageTitle">PhishGuard</title>
 </head>
 <body>
   <div class="container">
     <!-- Logo Section -->
     <div class="logo" id="logoSection">
       <img src="logo.png" alt="Logo" />
-      <h1>PhishGuard</h1>
+      <h1 id="logoTitle">PhishGuard</h1>
       <div class="header-buttons" id="headerButtons">
         <button class="icon-button" id="supportButton" title="Report Problem">
           <i class="fas fa-question-circle"></i>
@@ -26,7 +27,7 @@
           <div class="dropdown-content">
             <a href="aboutpage.html" id="aboutPage">About Page</a>
             <a href="donation.html" id="donationPage">Donation Page</a>
-            <a> Sync Settings (Coming Soon)</a>
+            <a id="syncSettings">Sync Settings (Coming Soon)</a>
           </div>
         </div>
       </div>
@@ -34,20 +35,20 @@
 
     <!-- Phishing Attempts Section -->
     <div class="section" id="phishingAttemptsSection">
-      <h2>Phishing Attempts</h2>
+      <h2 id="phishingHeading">Phishing Attempts</h2>
       <div class="content">
         <ul>
-          <li><strong>On this page:</strong> <span id="onThisPage">0</span></li>
-          <li><strong>In total:</strong> <span id="inTotal">0</span></li>
+          <li><strong id="onThisPageLabel">On this page:</strong> <span id="onThisPage">0</span></li>
+          <li><strong id="inTotalLabel">In total:</strong> <span id="inTotal">0</span></li>
         </ul>
       </div>
     </div>
 
     <!-- Page Scanner Section -->
     <div class="section" id="scannerSection">
-      <h2>Page Scanner</h2>
+      <h2 id="scannerHeading">Page Scanner</h2>
       <div class="content">
-        <button id="scanPageBtn" class="scan-button">🔍 Scan This Page</button>
+        <button id="scanPageBtn" class="scan-button">🔍 <span id="scanPageBtnText">Scan This Page</span></button>
         <p id="scanResult">Result: Not scanned yet.</p>
         <div class="trust-meter">
           <svg viewBox="0 0 36 36" class="circular-chart" id="trustChart">
@@ -63,26 +64,26 @@
 
     <!-- URL Checker Section -->
     <div class="section" id="urlCheckerSection">
-      <h2>URL Checker</h2>
+      <h2 id="urlCheckerHeading">URL Checker</h2>
       <div class="content">
         <input type="text" id="urlInput" placeholder="Enter a website URL..."
                style="width: 100%; padding: 8px; box-sizing: border-box; margin-bottom: 10px;" />
-        <button id="checkUrlBtn" class="scan-button">🔗 Check This URL</button>
+        <button id="checkUrlBtn" class="scan-button">🔗 <span id="checkUrlBtnText">Check This URL</span></button>
         <p id="urlCheckResult">Result: Not checked yet.</p>
         <div id="urlTrustBarContainer" style="width: 100%; background: #eee; height: 12px; border-radius: 6px; overflow: hidden;">
           <div id="urlTrustBar" style="width: 0%; height: 100%; background: green; transition: width 0.4s;"></div>
         </div>
-        <p><b>Note:</b> This scan analyses the URL structure only and can't inspect the content of the webpage.
+        <p id="urlNote"><b>Note:</b> This scan analyses the URL structure only and can't inspect the content of the webpage.
         👉 For deeper analysis, please visit the site and click “Scan This Page” to check on-page elements.</p>
       </div>
     </div>
 
     <!-- Allow Site Section -->
     <div class="section" id="allowSection">
-      <h2>Allow This Website by Default</h2>
+      <h2 id="allowHeading">Allow This Website by Default</h2>
       <div class="content">
         <label for="allowWebsite">
-          <input type="checkbox" id="allowWebsite" /> Allow this website by default
+          <input type="checkbox" id="allowWebsite" /> <span id="allowLabel">Allow this website by default</span>
         </label>
       </div>
     </div>
@@ -90,10 +91,10 @@
 
   <!-- Footer -->
   <footer>
-    <p>&copy; 2025 PhishGuard. All rights reserved.</p>
+    <p id="footerText">&copy; 2025 PhishGuard. All rights reserved.</p>
   </footer>
 
-  <!-- JS -->
+  <!-- Scripts -->
   <script src="settings.js"></script>
   <script src="popup.js" type="module"></script>
 </body>
