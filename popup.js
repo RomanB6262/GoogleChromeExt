@@ -142,21 +142,32 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 // === URL CHECKER ===
+function isLikelyURL(input) {
+  const urlRegex = /^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/;
+  return urlRegex.test(input);
+}
+
 document.getElementById("checkUrlBtn").addEventListener("click", async () => {
-  const input = document.getElementById("urlInput").value;
+  const input = document.getElementById("urlInput").value.trim();
   const resultText = document.getElementById("urlCheckResult");
   const bar = document.getElementById("urlTrustBar");
 
-  if (!input) {
+  // ✅ STEP 1: Check empty or non-likely URL
+  if (!input || !isLikelyURL(input)) {
     resultText.textContent = "Please enter a valid URL.";
+    bar.style.width = "0%";
+    bar.style.backgroundColor = "gray";
     return;
   }
 
+  // ✅ STEP 2: Try to create a URL object
   let url;
   try {
-    url = new URL(input);
+    url = new URL(input.startsWith("http") ? input : `https://${input}`);
   } catch {
     resultText.textContent = "Invalid URL format.";
+    bar.style.width = "0%";
+    bar.style.backgroundColor = "gray";
     return;
   }
 
@@ -176,6 +187,7 @@ document.getElementById("checkUrlBtn").addEventListener("click", async () => {
       return;
     }
 
+    // 🔍 Scoring logic
     if (url.protocol === "http:") { score += 20; flags++; }
     if (domain.match(/\b\d{1,3}(\.\d{1,3}){3}\b/)) { score += 3; flags++; }
     if ((domain.match(/-/g) || []).length >= 3) { score += 2; flags++; }
@@ -222,6 +234,7 @@ document.getElementById("checkUrlBtn").addEventListener("click", async () => {
     bar.style.backgroundColor = color;
   });
 });
+
 
 // === ALLOW WEBSITE ===
 document.addEventListener("DOMContentLoaded", () => {
